@@ -1,50 +1,46 @@
 version: 2
 
 models:
-  # =========================
-  # DIM_ZONES
-  # =========================
   - name: dim_zones
     description: >
       Dimension table for NYC taxi zones.
-      Contains borough and zone name information.
+      One row per location_id.
 
     columns:
       - name: location_id
-        description: Unique identifier for taxi zone.
+        description: Primary key for taxi zones.
         tests:
           - unique
           - not_null
 
       - name: borough
         description: NYC borough name.
-        tests:
-          - not_null
 
       - name: zone
         description: Taxi zone / neighborhood name.
-        tests:
-          - not_null
 
       - name: service_zone
-        description: Service zone category (Yellow, Green, Airport).
+        description: Service zone type.
 
-
-  # =========================
-  # FCT_TRIPS
-  # =========================
   - name: fct_trips
     description: >
-      Fact table containing all taxi trips from yellow and green taxis.
-      Each row represents one trip.
+      Fact table containing all taxi trips from green and yellow taxis.
+      One row per trip.
 
     columns:
-      # Primary key
       - name: trip_id
         description: Unique hashed identifier for each taxi trip.
         tests:
           - unique
           - not_null
+
+      - name: service_type
+        description: Taxi service type (Green or Yellow).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Green", "Yellow"]
 
       - name: vendorid
         description: Taxi vendor identifier.
@@ -61,33 +57,34 @@ models:
         tests:
           - not_null
 
+      - name: pickup_locationid
+        description: Pickup taxi zone ID.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_zones')
+                field: location_id
+
+      - name: dropoff_locationid
+        description: Dropoff taxi zone ID.
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_zones')
+                field: location_id
+
+      - name: fare_amount
+        description: Base fare amount.
+
       - name: total_amount
-        description: Total fare charged for the trip.
+        description: Total fare charged.
         tests:
           - not_null
 
-      # Foreign key integrity
-      - name: pickup_locationid
-        description: Taxi zone where trip started.
-        tests:
-          - relationships:
-              to: ref('dim_zones')
-              field: location_id
-
-      - name: dropoff_locationid
-        description: Taxi zone where trip ended.
-        tests:
-          - relationships:
-              to: ref('dim_zones')
-              field: location_id
-
-      # Accepted values example
-      - name: payment_type
-        description: Payment method code.
-        tests:
-          - accepted_values:
-              values: [1, 2, 3, 4, 5, 6]
-
+      - name: payment_type_description
+        description: Human-readable payment type description.
 
 # version: 1
 

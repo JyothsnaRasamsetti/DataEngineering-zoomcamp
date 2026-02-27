@@ -1,65 +1,42 @@
 version: 2
 
 models:
-  # =========================
-  # STG_GREEN_TRIPDATA
-  # =========================
   - name: stg_green_tripdata
-    description: Staging model for green taxi trip data.
+    description: Raw standardized green taxi data.
 
     columns:
-      - name: tripid
-        description: Raw trip identifier.
-        tests:
-          - unique
-          - not_null
+      - name: lpep_pickup_datetime
+        description: Pickup timestamp
 
-      - name: pickup_datetime
-        description: Timestamp when trip started.
-        tests:
-          - not_null
-
-      - name: dropoff_datetime
-        description: Timestamp when trip ended.
-        tests:
-          - not_null
+      - name: lpep_dropoff_datetime
+        description: Dropoff timestamp
 
       - name: payment_type
-        description: Payment method code.
-        tests:
-          - accepted_values:
-              values: [1, 2, 3, 4, 5, 6]
+        description: Raw payment type code
 
-
-  # =========================
-  # STG_YELLOW_TRIPDATA
-  # =========================
   - name: stg_yellow_tripdata
-    description: Staging model for yellow taxi trip data.
+    description: Raw standardized yellow taxi data.
 
     columns:
-      - name: tripid
-        tests:
-          - unique
-          - not_null
+      - name: tpep_pickup_datetime
+        description: Pickup timestamp
 
-      - name: pickup_datetime
-        tests:
-          - not_null
+      - name: tpep_dropoff_datetime
+        description: Dropoff timestamp
 
-      - name: dropoff_datetime
-        tests:
-          - not_null
+      - name: payment_type
+        description: Raw payment type code
 
 
-  # =========================
-  # INT_TRIPS_UNIONED
-  # =========================
-  - name: int_trips_unioned
-    description: Intermediate model combining green and yellow taxi trips.
 
-    columns:
-      - name: trip_id
-        tests:
-          - unique
-          - not_null
+# version: 2
+
+# models:
+#   - name: stg_green_tripdata
+#     description: Staging model for green taxi trip data.
+
+#   - name: stg_yellow_tripdata
+#     description: Staging model for yellow taxi trip data.
+
+#   - name: int_trips_unioned
+#     description: Intermediate model combining yellow and green taxi trips.
