@@ -1,0 +1,11 @@
+version: 2
+
+models:
+  - name: stg_green_tripdata
+    description: Staging model for green taxi trip data.
+
+  - name: stg_yellow_tripdata
+    description: Staging model for yellow taxi trip data.
+
+  - name: int_trips_unioned
+    description: Intermediate model combining yellow and green taxi trips.
