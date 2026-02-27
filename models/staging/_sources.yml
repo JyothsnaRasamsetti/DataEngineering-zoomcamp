@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: nytaxi
+    database: project-63115d58-b971-40b8-8af
+    schema: nytaxi
+
+    tables:
+      - name: green_tripdata
+      - name: yellow_tripdata
