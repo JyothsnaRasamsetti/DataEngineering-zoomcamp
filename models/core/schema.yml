@@ -13,6 +13,15 @@ models:
           - unique
           - not_null
 
+      - name: borough
+        description: NYC borough name.
+
+      - name: zone
+        description: Taxi zone / neighborhood name.
+
+      - name: service_zone
+        description: Service zone category (Yellow, Green, Airport).
+
   - name: fct_trips
     description: |
       Fact table containing all taxi trips from yellow and green taxis.
