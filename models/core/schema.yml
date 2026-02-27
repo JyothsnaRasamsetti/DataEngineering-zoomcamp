@@ -1,6 +1,9 @@
 version: 2
 
 models:
+  # =========================
+  # DIM_ZONES
+  # =========================
   - name: dim_zones
     description: >
       Dimension table for NYC taxi zones.
@@ -15,30 +18,118 @@ models:
 
       - name: borough
         description: NYC borough name.
+        tests:
+          - not_null
 
       - name: zone
         description: Taxi zone / neighborhood name.
+        tests:
+          - not_null
 
       - name: service_zone
         description: Service zone category (Yellow, Green, Airport).
 
+
+  # =========================
+  # FCT_TRIPS
+  # =========================
   - name: fct_trips
-    description: |
+    description: >
       Fact table containing all taxi trips from yellow and green taxis.
       Each row represents one trip.
 
     columns:
+      # Primary key
       - name: trip_id
         description: Unique hashed identifier for each taxi trip.
+        tests:
+          - unique
+          - not_null
 
       - name: vendorid
         description: Taxi vendor identifier.
+        tests:
+          - not_null
 
       - name: pickup_datetime
         description: Timestamp when trip started.
+        tests:
+          - not_null
 
       - name: dropoff_datetime
         description: Timestamp when trip ended.
+        tests:
+          - not_null
 
       - name: total_amount
         description: Total fare charged for the trip.
+        tests:
+          - not_null
+
+      # Foreign key integrity
+      - name: pickup_locationid
+        description: Taxi zone where trip started.
+        tests:
+          - relationships:
+              to: ref('dim_zones')
+              field: location_id
+
+      - name: dropoff_locationid
+        description: Taxi zone where trip ended.
+        tests:
+          - relationships:
+              to: ref('dim_zones')
+              field: location_id
+
+      # Accepted values example
+      - name: payment_type
+        description: Payment method code.
+        tests:
+          - accepted_values:
+              values: [1, 2, 3, 4, 5, 6]
+
+
+# version: 1
+
+# models:
+#   - name: dim_zones
+#     description: >
+#       Dimension table for NYC taxi zones.
+#       Contains borough and zone name information.
+
+#     columns:
+#       - name: location_id
+#         description: Unique identifier for taxi zone.
+#         tests:
+#           - unique
+#           - not_null
+
+#       - name: borough
+#         description: NYC borough name.
+
+#       - name: zone
+#         description: Taxi zone / neighborhood name.
+
+#       - name: service_zone
+#         description: Service zone category (Yellow, Green, Airport).
+
+#   - name: fct_trips
+#     description: |
+#       Fact table containing all taxi trips from yellow and green taxis.
+#       Each row represents one trip.
+
+#     columns:
+#       - name: trip_id
+#         description: Unique hashed identifier for each taxi trip.
+
+#       - name: vendorid
+#         description: Taxi vendor identifier.
+
+#       - name: pickup_datetime
+#         description: Timestamp when trip started.
+
+#       - name: dropoff_datetime
+#         description: Timestamp when trip ended.
+
+#       - name: total_amount
+#         description: Total fare charged for the trip.
