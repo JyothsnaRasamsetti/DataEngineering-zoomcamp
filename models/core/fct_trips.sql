@@ -1,14 +1,14 @@
 with trips as (
   select
-    to_hex(md5(concat(
-      cast(vendorid as string), '-',
-      cast(pickup_datetime as string), '-',
-      cast(dropoff_datetime as string), '-',
-      cast(pickup_locationid as string), '-',
-      cast(dropoff_locationid as string), '-',
-      cast(total_amount as string), '-',
-      service_type
-    ))) as trip_id,
+    {{ dbt_utils.generate_surrogate_key([
+    'vendorid',
+    'pickup_datetime',
+    'dropoff_datetime',
+    'pickup_locationid',
+    'dropoff_locationid',
+    'total_amount',
+    'service_type'
+]) }} as trip_id,
 
     vendorid,
     ratecodeid,
